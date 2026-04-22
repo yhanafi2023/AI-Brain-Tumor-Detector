@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AI Tumor Detector</title>
+        <link rel="icon" type="image/png" href="./tumorfavicon.png">
+        <link rel="stylesheet" href="./index.css">
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">Brain Tumor Detector
+        <a href="./tumorfavicon.png" class="nav-link">
+            <img src="./tumorfavicon.png" alt="Favicon">
+        </a>
+        </div>
+        <div class="nav-tabs">
+            <a href="ann.html" class="tab-link">ANN Model</a>
+            <a href="cnn.html" class="tab-link">CNN Model</a>
+        </div>
+    </nav>
+    <div class="lower-content">
+   
+
+    <section id="cnn-section" class="tab-content">
+                <h2>Convolutional Neural Network</h2>
+                <p>Optimized for image recognition and tumor localization.</p>
+                <form id="cnn-form" enctype="multipart/form-data">
+                    <input type="file" id="file-input" name="file" accept=".jpg, .jpeg, .png" required>
+                    <div id="userimg-container">
+                        <img id="userimg-preview" src="#" alt="Your Scan" style="display: none; max-width: 300px; margin-top: 20px; border: 2px solid #57092d;">
+                    </div>
+                    <div id="results-display" class="results-box" style="visibility: hidden;">
+                        <h3>Analysis Result</h3>
+                        <p id="prediction-text">Waiting for scan...</p>
+                     </div>
+                    <button type="submit" class="upload-btn">Analyze with CNN</button>
+                </form>
+    </section>
+   
+    </div>
+    <script>
+    const fileInput = document.getElementById('file-input');
+    const imagePreview = document.getElementById('userimg-preview');
+    const cnnForm = document.getElementById('cnn-form');
+    const predictionText = document.getElementById('prediction-text');
+    const resultsDisplay = document.getElementById('results-display');
+
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+   
+    cnnForm.addEventListener('submit', async function(event) {
+        event.preventDefault(); 
+
+        resultsDisplay.style.visibility = 'visible';
+        predictionText.innerHTML = "Analyzing scan...";
+        predictionText.style.color = "orange";
+
+        const formData = new FormData(cnnForm);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/predictcnn', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) throw new Error('Server error');
+
+            const result = await response.json(); 
+
+            predictionText.innerHTML = ""; 
+            predictionText.style.color = "black"; 
+
+            result.probabilities.forEach((prob, index) => {
+                const className = result.classes[index].replace('_', ' ');
+                const percentage = (prob * 100).toFixed(2);
+                const style = prob > 0.5 ? "color: green; font-weight: bold;" : "";
+                
+                predictionText.innerHTML += `
+                    <div style="margin-bottom: 5px; ${style}">
+                        ${className}: ${percentage}%
+                    </div>`;
+            });
+
+        } catch (error) {
+            console.error("Error:", error);
+            predictionText.innerText = "Error connecting to server.";
+            predictionText.style.color = "gray";
+        }
+    });
+</script>
+</body>
+</html>

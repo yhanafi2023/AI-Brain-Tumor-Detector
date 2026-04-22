@@ -1,0 +1,5 @@
+﻿backend/*.keras
+*.keras
+*.h5
+__pycache__/
+venv/
