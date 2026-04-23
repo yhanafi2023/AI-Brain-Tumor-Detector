@@ -89,6 +89,7 @@ The Artificial Neural Network is defined as follows:
 ### ANN Training Configuration:
 - Optimizer: Stochastic Gradient Descent (SGD)
 - Loss Function: sparse_categorical_crossentropy
+- Utilized 5 Epochs
 
 ---
 
@@ -127,6 +128,7 @@ The Convolutional Neural Network is defined as follows:
 ### CNN Training Configuration:
 - Optimizer: Adam
 - Loss Function: sparse_categorical_crossentropy
+- Utilzied 10 Epochs
 
 ---
 
@@ -173,3 +175,7 @@ python server.py
 ```bash
 npx serve
 ```
+
+
+
+# **Last Updated:** April 2026
