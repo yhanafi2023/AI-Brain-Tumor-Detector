@@ -22,11 +22,11 @@ def ann_evaluate_img():
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     prediction = model.predict(img_array)
-    probabilities = [float(p) for p in prediction[0]]  
+    predicted_index = np.argmax(prediction[0])
+    predicted_class = classes[predicted_index]
 
     return jsonify({
-        'probabilities': probabilities,
-        'classes': classes
+        "prediction": predicted_class,
     })
 @app.route('/predictcnn', methods=['POST'])
 def cnn_evaluate_img():
@@ -37,7 +37,6 @@ def cnn_evaluate_img():
     prediction = model2.predict(img_array)
     predicted_index = np.argmax(prediction[0])
     predicted_class = classes[predicted_index]
-    probabilities = [float(p) for p in prediction[0]]  
 
     return jsonify({
         "prediction": predicted_class,
