@@ -35,11 +35,12 @@ def cnn_evaluate_img():
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     prediction = model2.predict(img_array)
+    predicted_index = np.argmax(prediction[0])
+    predicted_class = classes[predicted_index]
     probabilities = [float(p) for p in prediction[0]]  
 
     return jsonify({
-        'probabilities': probabilities,
-        'classes': classes
+        "prediction": predicted_class,
     })
 
 if __name__ == '__main__':

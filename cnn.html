@@ -82,16 +82,7 @@
             predictionText.innerHTML = ""; 
             predictionText.style.color = "black"; 
 
-            result.probabilities.forEach((prob, index) => {
-                const className = result.classes[index].replace('_', ' ');
-                const percentage = (prob * 100).toFixed(2);
-                const style = prob > 0.5 ? "color: green; font-weight: bold;" : "";
-                
-                predictionText.innerHTML += `
-                    <div style="margin-bottom: 5px; ${style}">
-                        ${className}: ${percentage}%
-                    </div>`;
-            });
+            predictionText.innerHTML += `<strong>Predicted Class:</strong> ${result.prediction}<br><br>`;
 
         } catch (error) {
             console.error("Error:", error);
