@@ -78,10 +78,7 @@ X_test  = X_test  / 255.0
 
 #making the ANN model
 ann = models.Sequential([
-    layers.RandomRotation(0.05), #augmentation
-    layers.RandomZoom(0.05), #augmentation
-    layers.RandomBrightness(0.05), #vary brightness by 10% for better generalization
-    layers.RandomContrast(0.05), #vary contrast by 10% for better generalization
+    
     layers.Flatten(input_shape=(IMG_SIZE, IMG_SIZE, 3)), #flatten images using 64x64x3
     layers.Dense(3000, activation='relu'), #reduce neurons with ReLU
     layers.Dense(1000, activation='relu'), #reduce again
