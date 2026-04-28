@@ -189,7 +189,9 @@ python server.py
 ```
 ### 5. Launch Website Locally
 ```bash
+cd ..
 npx serve
+
 ```
 
 
