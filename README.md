@@ -97,6 +97,11 @@ The Artificial Neural Network is defined as follows:
 
 The Convolutional Neural Network is defined as follows:
 
+- DATA AUGMENTATION for Generalization:
+  - Added Random 5% rotation
+  - Added Random 5% zoom
+  - Added Random horizontal flips (common for MRIs)
+
 - Input Layer:
   - Conv2D
     - Filters: 32
@@ -115,12 +120,23 @@ The Convolutional Neural Network is defined as follows:
     - Activation: ReLU
   - MaxPooling2D
     - Pool size: 2 x 2
+- Second Convolution Block:
+  - Conv2D
+    - Filters: 64
+    - Kernel size: 3 x 3
+    - Activation: ReLU
+  - MaxPooling2D
+    - Pool size: 2 x 2
+   
+
+- 
 
 - Classification Head:
   - Flatten layer
   - Dense layer
     - 64 neurons
     - Activation: ReLU
+  - Dropout Layer (Drop 40%)
   - Output Dense layer
     - 4 neurons
     - Activation: Softmax
