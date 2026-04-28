@@ -78,6 +78,10 @@ X_test  = X_test  / 255.0
 
 #making the ANN model
 ann = models.Sequential([
+    layers.RandomRotation(0.05), #augmentation
+    layers.RandomZoom(0.05), #augmentation
+    layers.RandomBrightness(0.05), #vary brightness by 10% for better generalization
+    layers.RandomContrast(0.05), #vary contrast by 10% for better generalization
     layers.Flatten(input_shape=(IMG_SIZE, IMG_SIZE, 3)), #flatten images using 64x64x3
     layers.Dense(3000, activation='relu'), #reduce neurons with ReLU
     layers.Dense(1000, activation='relu'), #reduce again
@@ -100,6 +104,9 @@ ann.save("ann_model.keras") #save our model for backend use
 
 #making the cnn model
 cnn = models.Sequential([
+    layers.RandomRotation(0.05),
+    layers.RandomZoom(0.05),
+    layers.RandomFlip("horizontal"),
     layers.Conv2D(filters=32, kernel_size=(3, 3), activation='relu',
     input_shape=(IMG_SIZE, IMG_SIZE, 3)), #first CONV layer that puts a 3x3 kernel activated by ReLU with 32 filters
     layers.MaxPooling2D((2, 2)), #uses max pooling with a 2x2 filter
@@ -107,8 +114,12 @@ cnn = models.Sequential([
     layers.Conv2D(filters=64, kernel_size=(3, 3), activation='relu'), #second CONV layer with 64 filters of 3x3 activated by ReLU
     layers.MaxPooling2D((2, 2)), #same max pooling parameter
 
+    layers.Conv2D(128, (3,3), activation='relu'),
+    layers.MaxPooling2D((2,2)),
+
     layers.Flatten(), #flatten data
-    layers.Dense(64, activation='relu'),
+    layers.Dense(256, activation='relu'),
+    layers.Dropout(0.4), #dropout layer to prevent overfitting by randomly dropping 50% of neurons
     layers.Dense(4, activation='softmax')    # calculate probabilities of confidence for each class of tumor
 ])
 
